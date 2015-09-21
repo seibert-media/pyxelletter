@@ -1,1 +1,1 @@
-from pyxelletter import Pyxelletter
+from pyxelletter import Pyxelletter, LetterNotFoundException

@@ -11,7 +11,6 @@ class LetterNotFoundException(Exception):
 
 
 class Pyxelletter(object):
-
     def __init__(self, username, password):
         """
         :param username: Username (email) registered with in Pixelletter
@@ -38,12 +37,19 @@ class Pyxelletter(object):
 
     def _make_post_request(self, path, data=None, files=None):
         r = self.session.post(self.api_url + path, data=data, files=files)
-        if r.status_code == 200:
+        if r.status_code == 200 or r.status_code == 201:
             return r.text
         else:
             return None
 
-    def send_letter(self, file_path, destination='DE', duplex=True, color=False, user_transaction=None,
+    def _make_patch_request(self, path, data=None, files=None):
+        r = self.session.patch(self.api_url + path, data=data, files=files)
+        if r.status_code == 200 or r.status_code == 201:
+            return r.text
+        else:
+            return None
+
+    def send_letter(self, file_list, destination='DE', duplex=True, color=False, user_transaction=None,
                     test_environment=False):
         """
         Send pdf-File
@@ -55,24 +61,43 @@ class Pyxelletter(object):
         :param test_environment: Enable Test-Mode
         :return: Letter-ID if letter was sended successfully, else None
         """
-        try:
-            files = {'file': open(file_path, 'rb')}
-        except IOError:
-            raise LetterNotFoundException('File does not exist in specified path: {}'.format(file_path))
+        idx = 0
+        last = len(file_list) - 1
+        multiple_files = True if len(file_list) > 1 else False
+        letter_id = None
+        for file_path in file_list:
+            try:
+                files = {'file': open(file_path, 'rb')}
+            except IOError:
+                raise LetterNotFoundException('File does not exist in specified path: {}'.format(file_path))
 
-        data = {
-            'settings[destination]': destination,
-            'settings[simplex]': 'NONE' if duplex else 'ALL',
-            'settings[color]': 'ALL' if color else 'NONE',
-            'settings[user_transaction]': user_transaction,
-            'settings[test_environment]': test_environment
-        }
-        send_req = self._make_post_request('letters', data=data, files=files)
+            if idx == 0:
+                data = {
+                    'settings[destination]': destination,
+                    'settings[simplex]': 'NONE' if duplex else 'ALL',
+                    'settings[color]': 'ALL' if color else 'NONE',
+                    'settings[user_transaction]': user_transaction,
+                    'settings[test_environment]': test_environment,
+                    'incomplete': True if multiple_files else False
+                }
+                send_req = self._make_post_request('letters', data=data, files=files)
 
-        if send_req:
-            return json.loads(send_req)['id']
+                if send_req:
+                    if not multiple_files:
+                        return json.loads(send_req)['id']
+                    else:
+                        letter_id = json.loads(send_req)['id']
+                else:
+                    return None
 
-        return None
+            if idx > 0:
+                if idx == last:
+                    self._make_patch_request('letters/{}'.format(letter_id), data={'incomplete': False}, files=files)
+                else:
+                    self._make_patch_request('letters/{}'.format(letter_id), data={'incomplete': True}, files=files)
+
+            idx += 1
+        return letter_id
 
     def get_letters(self):
         """
