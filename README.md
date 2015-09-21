@@ -29,11 +29,11 @@ INSTALLATION
   Function returns the Pixelletter-ID of the sended file if successful. 
   Returns None if failed.
   
-    p.send_letter(file_path, destination, duplex, color, user_transaction, test_environment)
+    p.send_letter(file_list, destination, duplex, color, user_transaction, test_environment)
   
   Function parameters
   
-  * file_path: path of the pdf-file you want to send via API
+  * file_list: path of the pdf-files AS LSIT you want to send via API
   * destination: destination country, default: 'DE'
   * duplex: letter in duplex, else simplex, default: True
   * color: letter with color, default: False
