@@ -33,7 +33,7 @@ INSTALLATION
   
   Function parameters
   
-  * file_list: path of the pdf-files AS LSIT you want to send via API
+  * file_list: path of the pdf-files AS LIST you want to send via API
   * destination: destination country, default: 'DE'
   * duplex: letter in duplex, else simplex, default: True
   * color: letter with color, default: False
