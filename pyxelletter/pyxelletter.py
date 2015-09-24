@@ -111,13 +111,25 @@ class Pyxelletter(object):
 
         return []
 
-    def get_letter_as_pdf(self, pixelleter_id):
+    def get_letter_status(self, pixelletter_id):
+        """
+        :param pixelletter_id: ID of the letter
+        :return: dict containing status of the requested letter
+        """
+        letter_status = self._make_get_request('letters/{}'.format(pixelletter_id))
+
+        if letter_status:
+            return json.loads(letter_status)
+
+        return None
+
+    def get_letter_as_pdf(self, pixelletter_id):
         """
         Get specified letter by letter ID
         :param pixelleter_id: ID of the letter
         :return: PDF-Letter-Unicode-String if successful else None
         """
-        pdf_letter = self._make_get_request('letters/{}.pdf'.format(pixelleter_id))
+        pdf_letter = self._make_get_request('letters/{}.pdf'.format(pixelletter_id))
 
         if pdf_letter:
             return pdf_letter
