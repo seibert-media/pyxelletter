@@ -33,7 +33,7 @@ INSTALLATION
   
   Function parameters
   
-  * file_list: path of the pdf-files AS LIST you want to send via API
+  * file_list: list of file-objects
   * destination: destination country, default: 'DE'
   * duplex: letter in duplex, else simplex, default: True
   * color: letter with color, default: False
@@ -44,8 +44,14 @@ INSTALLATION
   
   Function returns list of orders. 
   Returns empty list if failed.
-  
+    
     p.get_letters()
+    
+### Get status of a specific letter
+  
+  Function returns a dictionary containing information about the letter you were requesting.
+    
+    p.get_letter_status()
 
 ### Get specific letter (as pdf or image)
   

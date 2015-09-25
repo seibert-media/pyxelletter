@@ -53,7 +53,7 @@ class Pyxelletter(object):
                     test_environment=False):
         """
         Send pdf-File
-        :param file_path: path, where the file is located
+        :param file_list: list of files
         :param destination: country code of the destination country
         :param duplex: send letter in duplex
         :param color: send letter with color or black/white
@@ -61,16 +61,13 @@ class Pyxelletter(object):
         :param test_environment: Enable Test-Mode
         :return: Letter-ID if letter was sended successfully, else None
         """
+
         idx = 0
         last = len(file_list) - 1
         multiple_files = True if len(file_list) > 1 else False
         letter_id = None
-        for file_path in file_list:
-            try:
-                files = {'file': open(file_path, 'rb')}
-            except IOError:
-                raise LetterNotFoundException('File does not exist in specified path: {}'.format(file_path))
-
+        for file in file_list:
+            files = {'file': file}
             if idx == 0:
                 data = {
                     'settings[destination]': destination,
