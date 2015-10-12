@@ -85,7 +85,7 @@ class Pyxelletter(object):
                     else:
                         letter_id = json.loads(send_req)['id']
                 else:
-                    return None
+                    return send_req
 
             if idx > 0:
                 if idx == last:

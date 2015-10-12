@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='pyxelletter',
-    version='0.6.1',
+    version='0.6.1.1',
     install_requires=['requests==2.7.0'],
     packages=['pyxelletter'],
     url='https://github.com/seibert-media/pyxelletter',
