@@ -50,7 +50,7 @@ class Pyxelletter(object):
             return None
 
     def send_letter(self, file_list, destination='DE', duplex=True, color=False, user_transaction=None,
-                    test_environment=False):
+                    gogreen=False,test_environment=False):
         """
         Send pdf-File
         :param file_list: list of files
@@ -75,6 +75,7 @@ class Pyxelletter(object):
                     'settings[color]': 'ALL' if color else 'NONE',
                     'settings[user_transaction]': user_transaction,
                     'settings[test_environment]': test_environment,
+                    'settings[gogreen]': True if gogreen else False,
                     'incomplete': True if multiple_files else False
                 }
                 send_req = self._make_post_request('letters', data=data, files=files)
