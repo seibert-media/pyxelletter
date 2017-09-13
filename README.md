@@ -1,3 +1,5 @@
+[![PyPI version](https://badge.fury.io/py/pyxelletter.svg)](https://badge.fury.io/py/pyxelletter)
+
 # pyxelletter
 
 ## python-library for pixelletter
