@@ -3,3 +3,5 @@ dist
 pyxelletter.egg-info
 .idea
 *.py[cod]
+venv/
+virtualenv/
