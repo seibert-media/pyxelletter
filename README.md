@@ -9,7 +9,7 @@ INSTALLATION
 
     pip install pyxelletter
   
-  If you're confronted with problems, feel free to contact me: nnasri@seibert-media.net
+  If you're confronted with problems, feel free to contact me: jpetry@seibert-media.net
 
 ## OPTIONS
   * Send letter
@@ -74,8 +74,3 @@ INSTALLATION
   
   Function parameters
   * pixelletter_id: Pixelletter-ID of the letter to cancel.
-
-
-  
-  
-  

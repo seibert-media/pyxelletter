@@ -10,7 +10,7 @@ class LetterNotFoundException(Exception):
     pass
 
 
-class Pyxelletter(object):
+class Pyxelletter:
     def __init__(self, username, password):
         """
         :param username: Username (email) registered with in Pixelletter
@@ -49,8 +49,16 @@ class Pyxelletter(object):
         else:
             return None
 
-    def send_letter(self, file_list, destination='DE', duplex=True, color=False, user_transaction=None,
-                    gogreen=False,test_environment=False):
+    def send_letter(
+        self,
+        file_list,
+        destination='DE',
+        duplex=True,
+        color=False,
+        user_transaction=None,
+        gogreen=False,
+        test_environment=False,
+    ):
         """
         Send pdf-File
         :param file_list: list of files
@@ -61,7 +69,6 @@ class Pyxelletter(object):
         :param test_environment: Enable Test-Mode
         :return: Letter-ID if letter was sended successfully, else None
         """
-
         idx = 0
         last = len(file_list) - 1
         multiple_files = True if len(file_list) > 1 else False
@@ -89,10 +96,7 @@ class Pyxelletter(object):
                     return send_req
 
             if idx > 0:
-                if idx == last:
-                    self._make_patch_request('letters/{}'.format(letter_id), data={'incomplete': False}, files=files)
-                else:
-                    self._make_patch_request('letters/{}'.format(letter_id), data={'incomplete': True}, files=files)
+                self._make_patch_request(f'letters/{letter_id}', data={'incomplete': not (idx == last)}, files=files)
 
             idx += 1
         return letter_id
@@ -114,7 +118,7 @@ class Pyxelletter(object):
         :param pixelletter_id: ID of the letter
         :return: dict containing status of the requested letter
         """
-        letter_status = self._make_get_request('letters/{}'.format(pixelletter_id))
+        letter_status = self._make_get_request(f'letters/{pixelletter_id}')
 
         if letter_status:
             return json.loads(letter_status)
@@ -127,7 +131,7 @@ class Pyxelletter(object):
         :param pixelleter_id: ID of the letter
         :return: PDF-Letter-Unicode-String if successful else None
         """
-        pdf_letter = self._make_get_request('letters/{}.pdf'.format(pixelletter_id))
+        pdf_letter = self._make_get_request(f'letters/{pixelletter_id}.pdf')
 
         if pdf_letter:
             return pdf_letter
@@ -140,7 +144,7 @@ class Pyxelletter(object):
         :param pixelletter_id: ID of the letter
         :return: JPG-Letter-Unicode-String if successful else None
         """
-        image_letter = self._make_get_request('letters/previews/{}_1.jpg'.format(pixelletter_id))
+        image_letter = self._make_get_request(f'letters/previews/{pixelletter_id}_1.jpg')
 
         if image_letter:
             return image_letter
@@ -153,7 +157,7 @@ class Pyxelletter(object):
         :param pixelletter_id: ID of the letter
         :return: True if canceled, else False
         """
-        cancel_request = self._make_delete_request('letters/{}'.format(pixelletter_id))
+        cancel_request = self._make_delete_request(f'letters/{pixelletter_id}')
         status = json.loads(cancel_request)['status']
 
         if status == 200:
